@@ -1,63 +1,59 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
-import java.time.LocalDate;
+import jakarta.validation.Valid;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
-@Slf4j
 @RestController
 @RequestMapping("/films")
+@RequiredArgsConstructor
 public class FilmController {
 
-    private final Map<Integer, Film> films = new HashMap<>();
-    private int nextId = 1;
+    private final FilmService filmService;
 
-    private static final LocalDate CINEMA_BIRTHDAY = LocalDate.of(1895, 12, 28);
+    @GetMapping("/{id}")
+    public ResponseEntity<Film> getFilmById(@PathVariable Long id) {
+        Film film = filmService.getFilmById(id);
+        return ResponseEntity.ok(film);
+    }
 
     @PostMapping
-    public Film createFilm(@Valid @RequestBody Film film) {
-        validateFilm(film);
-        film.setId(nextId++);
-        films.put(film.getId(), film);
-        log.info("Film created: {}", film);
-        return film;
+    public ResponseEntity<Film> createFilm(@Valid @RequestBody Film film) {
+        Film createdFilm = filmService.createFilm(film);
+        return new ResponseEntity<>(createdFilm, HttpStatus.CREATED);
     }
 
     @PutMapping
-    public Film updateFilm(@Valid @RequestBody Film film) {
-        if (!films.containsKey(film.getId())) {
-            log.error("Failed to update film: film with id {} not found", film.getId());
-            throw new ValidationException("Film not found");
-        }
-        validateFilm(film);
-        films.put(film.getId(), film);
-        log.info("Film updated: {}", film);
-        return film;
+    public ResponseEntity<Film> updateFilm(@Valid @RequestBody Film film) {
+        Film updatedFilm = filmService.updateFilm(film);
+        return ResponseEntity.ok(updatedFilm);
     }
 
     @GetMapping
-    public Collection<Film> getAllFilms() {
-        return films.values();
+    public ResponseEntity<Collection<Film>> getAllFilms() {
+        return ResponseEntity.ok(filmService.getAllFilms());
     }
 
-    private void validateFilm(Film film) {
-        if (film.getReleaseDate().isBefore(CINEMA_BIRTHDAY)) {
-            String message = "Дата релиза не может быть раньше 28 декабря 1895 года";
-            log.error("{}: {}", message, film.getReleaseDate());
-            throw new ValidationException(message);
-        }
+    @PutMapping("/{id}/like/{userId}")
+    public ResponseEntity<Void> putLike(@PathVariable Long id, @PathVariable Long userId) {
+        filmService.putLike(id, userId);
+        return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/{id}/like/{userId}")
+    public ResponseEntity<Void> removeLike(@PathVariable Long id, @PathVariable Long userId) {
+        filmService.removeLike(id, userId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/popular")
+    public ResponseEntity<Collection<Film>> getPopularFilms(@RequestParam(defaultValue = "10") int count) {
+        return ResponseEntity.ok(filmService.getPopularFilms(count));
+    }
 }
