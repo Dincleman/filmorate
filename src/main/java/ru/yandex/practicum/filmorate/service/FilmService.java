@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +21,9 @@ public class FilmService {
     public void putLike(Long filmId, Long userId) {
         Film film = filmStorage.getFilmById(filmId);
         User user = userStorage.getUserById(userId);
+        if (film.getLikes() == null) {
+            film.setLikes(new HashSet<>());
+        }
         film.getLikes().add(user.getId());
         filmStorage.update(film);
     }
@@ -29,8 +33,10 @@ public class FilmService {
         if (!film.getLikes().contains(userId)) {
             throw new NotFoundException("Лайк не поставлен.");
         }
-        film.getLikes().remove(userId);
-        filmStorage.update(film);
+        if (film.getLikes() != null) {
+            film.getLikes().remove(userId);
+            filmStorage.update(film);
+        }
     }
 
     public Collection<Film> getPopularFilms(int count) {
