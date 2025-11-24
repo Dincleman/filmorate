@@ -37,7 +37,7 @@ public class FilmControllerTest {
     /** Создаёт образец фильма для тестов */
     private Film createSampleFilm() {
         Film film = new Film();
-        film.setId(1);
+        film.setId(1L);
         film.setName("Пример фильма");
         film.setDescription("Описание фильма");
         film.setReleaseDate(LocalDate.of(2000, 1, 1));

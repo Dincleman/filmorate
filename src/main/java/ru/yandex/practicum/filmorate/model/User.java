@@ -7,11 +7,13 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @Slf4j
 public class User {
     private Long id;  // ID генерируется в контроллере
+    private Set<Long> friends;  // друзьяшки
 
     @Email(message = "Email должен содержать символ @")
     @NotBlank(message = "Email не может быть пустым")

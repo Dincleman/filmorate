@@ -39,7 +39,7 @@ public class FilmorateApplicationTests {
 	@Test
 	public void shouldPassValidationForValidFilm() {
 		Film film = new Film();
-		film.setId(1);
+		film.setId(1L);
 		film.setName("Valid Film");
 		film.setDescription("Valid description");
 		film.setReleaseDate(LocalDate.of(2000, 1, 1));

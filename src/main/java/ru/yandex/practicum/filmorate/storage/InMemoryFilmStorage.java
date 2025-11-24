@@ -83,7 +83,7 @@ public class InMemoryFilmStorage implements FilmStorage {
                 log.debug("Указано новое значение releaseDate, изменение значения: {}", newFilm.getReleaseDate());
                 oldFilm.setReleaseDate(newFilm.getReleaseDate());
             }
-            if (newFilm.getDuration() != null) {
+            if (newFilm.getDuration() > 0) {
                 log.debug("Указано новое значение duration, изменение значения: {}", newFilm.getDuration());
                 oldFilm.setDuration(newFilm.getDuration());
             }
