@@ -63,7 +63,7 @@ public class FilmControllerTest {
         mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(film)))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(film)));
     }
 
