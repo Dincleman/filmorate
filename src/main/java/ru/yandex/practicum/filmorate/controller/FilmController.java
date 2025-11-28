@@ -18,42 +18,37 @@ public class FilmController {
     private final FilmService filmService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Film> getFilmById(@PathVariable Long id) {
-        Film film = filmService.getFilmById(id);
-        return ResponseEntity.ok(film);
+    public Film getFilmById(@PathVariable Long id) {
+        return filmService.getFilmById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Film> createFilm(@Valid @RequestBody Film film) {
-        Film createdFilm = filmService.createFilm(film);
-        return new ResponseEntity<>(createdFilm, HttpStatus.CREATED);
+    public Film createFilm(@Valid @RequestBody Film film) {
+        return filmService.createFilm(film);
     }
 
     @PutMapping
-    public ResponseEntity<Film> updateFilm(@Valid @RequestBody Film film) {
-        Film updatedFilm = filmService.updateFilm(film);
-        return ResponseEntity.ok(updatedFilm);
+    public Film updateFilm(@Valid @RequestBody Film film) {
+        return filmService.updateFilm(film) ;
     }
 
     @GetMapping
-    public ResponseEntity<Collection<Film>> getAllFilms() {
-        return ResponseEntity.ok(filmService.getAllFilms());
+    public Collection<Film> getAllFilms() {
+        return filmService.getAllFilms();
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public ResponseEntity<Void> putLike(@PathVariable Long id, @PathVariable Long userId) {
+    public void putLike(@PathVariable Long id, @PathVariable Long userId) {
         filmService.putLike(id, userId);
-        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public ResponseEntity<Void> removeLike(@PathVariable Long id, @PathVariable Long userId) {
+    public void removeLike(@PathVariable Long id, @PathVariable Long userId) {
         filmService.removeLike(id, userId);
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/popular")
-    public ResponseEntity<Collection<Film>> getPopularFilms(@RequestParam(defaultValue = "10") int count) {
-        return ResponseEntity.ok(filmService.getPopularFilms(count));
+    public Collection<Film> getPopularFilms(@RequestParam(defaultValue = "10") int count) {
+        return filmService.getPopularFilms(count);
     }
 }

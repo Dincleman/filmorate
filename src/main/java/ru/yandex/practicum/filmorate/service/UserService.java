@@ -17,18 +17,14 @@ public class UserService {
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
         user.getFriends().add(friendId);
-        userStorage.update(user);
         friend.getFriends().add(userId);
-        userStorage.update(friend);
     }
 
     public void removeFriend(Long userId, Long friendId) {
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
         user.getFriends().remove(friendId);
-        userStorage.update(user);
         friend.getFriends().remove(userId);
-        userStorage.update(friend);
     }
 
     public Collection<User> getAllFriends(Long userId) {

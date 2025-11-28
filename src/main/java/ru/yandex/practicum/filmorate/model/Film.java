@@ -14,7 +14,7 @@ import java.util.Set;
 @Data
 @Slf4j
 public class Film {
-    private static final LocalDate MIN_RELEASE_DATE = LocalDate.of(1895, 12, 28);
+    public static final LocalDate MIN_RELEASE_DATE = LocalDate.of(1895, 12, 28);
 
     private Long id;  // ID генерируется в контроллере
     private Set<Long> likes = new HashSet<>(); // лайки
@@ -31,7 +31,7 @@ public class Film {
     @Positive(message = "Продолжительность должна быть положительной")
     private int duration;
 
-    // Кастомная валидация для releaseDate (в контроллере или сервисе)
+    // Каситомная валидация для releaseDate (в контроллере или сервисе)
     public boolean isValidReleaseDate() {
         return releaseDate != null && !releaseDate.isBefore(MIN_RELEASE_DATE);
     }

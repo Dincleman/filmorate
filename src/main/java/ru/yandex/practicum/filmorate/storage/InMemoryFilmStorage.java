@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,13 +40,9 @@ public class InMemoryFilmStorage implements FilmStorage {
                     throw new ValidationException("Фильм с таким названием уже есть.");
                 }
             }
-            if (film.getReleaseDate() == null) {
-                log.error("Дата релиза не указана");
-                throw new ValidationException("Дата релиза не указана.");
-            }
-            if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-                log.error("Дата релиза раньше 28.12.1895: {}", film.getReleaseDate());
-                throw new ValidationException("Дата релиза не может быть раньше 28.12.1895.");
+            if (!film.isValidReleaseDate()) {
+                log.error("Дата релиза не указана или раньше " + Film.MIN_RELEASE_DATE.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+                throw new ValidationException("Дата релиза не может быть пустой или раньше " + Film.MIN_RELEASE_DATE.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
             }
             film.setId(getNextId());
             films.put(film.getId(), film);
