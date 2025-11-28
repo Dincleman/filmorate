@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -16,7 +17,7 @@ public class Film {
     private static final LocalDate MIN_RELEASE_DATE = LocalDate.of(1895, 12, 28);
 
     private Long id;  // ID генерируется в контроллере
-    private Set<Long> likes;  // лайки
+    private Set<Long> likes = new HashSet<>();;  // лайки
 
     @NotBlank(message = "Название не может быть пустым")
     private String name;

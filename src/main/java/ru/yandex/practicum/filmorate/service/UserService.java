@@ -17,14 +17,8 @@ public class UserService {
     public void addFriend(Long userId, Long friendId) {
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
-        if (user.getFriends() == null) {
-            user.setFriends(new HashSet<>());
-        }
         user.getFriends().add(friendId);
         userStorage.update(user);
-        if (friend.getFriends() == null) {
-            friend.setFriends(new HashSet<>());
-        }
         friend.getFriends().add(userId);
         userStorage.update(friend);
     }
@@ -32,14 +26,10 @@ public class UserService {
     public void removeFriend(Long userId, Long friendId) {
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
-        if (user.getFriends() == null) {
-            user.getFriends().remove(friendId);
-            userStorage.update(user);
-            if (friend.getFriends() == null) {
-                friend.getFriends().remove(userId);
-                userStorage.update(friend);
-            }
-        }
+        user.getFriends().remove(friendId);
+        userStorage.update(user);
+        friend.getFriends().remove(userId);
+        userStorage.update(friend);
     }
 
     public Collection<User> getAllFriends(Long userId) {
