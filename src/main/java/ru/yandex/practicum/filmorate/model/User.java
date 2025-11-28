@@ -14,7 +14,7 @@ import java.util.Set;
 @Slf4j
 public class User {
     private Long id;  // ID генерируется в контроллере
-    private Set<Long> friends = new HashSet<>();;  // друзьяшки
+    private Set<Long> friends = new HashSet<>(); // друзьяшки
 
     @Email(message = "Email должен содержать символ @")
     @NotBlank(message = "Email не может быть пустым")
